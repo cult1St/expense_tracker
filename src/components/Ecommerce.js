@@ -1,5 +1,6 @@
 import React from "react";
 import Product from "./ecommerce/Product";
+import CartTable from "./ecommerce/CartTable";
 
 const Ecommerce = () => {
     const [loading, setLoading] = React.useState(true);
@@ -14,6 +15,7 @@ const Ecommerce = () => {
         } else {
             setCart([...cart, { ...product, qty: 1 }]);
         }
+        alert("Product added to cart");
     }
 
     React.useEffect(() => {
@@ -23,6 +25,9 @@ const Ecommerce = () => {
             console.log(data);
             setProducts(data);
             setLoading(false);
+        })
+        .catch((error) => {
+            alert("An Error Occurred: "+ error)
         })
     }, []);
   return (
@@ -45,7 +50,7 @@ const Ecommerce = () => {
           </button>
 
           <div className="collapse navbar-collapse justify-content-md-center justify-content-lg-end" id="navbarScroll">
-            <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style={{ "--bs-scroll-height": "100px", columnGap: "20px" }}>
+            <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
               <li className="nav-item">
                 <a className="nav-link active" href="index.html">
                   Home
@@ -74,25 +79,17 @@ const Ecommerce = () => {
     data-bs-toggle="dropdown"
     aria-expanded="false"
   >
-    Dropdown button
+   Cart <span>{cart.length}</span>
   </button>
-  <ul className="dropdown-menu">
-    <li>
-      <a className="dropdown-item" href="#">
-        Action
-      </a>
-    </li>
-    <li>
-      <a className="dropdown-item" href="#">
-        Another action
-      </a>
-    </li>
-    <li>
-      <a className="dropdown-item" href="#">
-        Something else here
-      </a>
-    </li>
-  </ul>
+  <div className="dropdown-menu">
+    {cart.length > 0 ? (
+        <CartTable cart={cart} />
+        
+    ) : (
+        <div className="dropdown-item">No items in cart</div>
+    )}
+            <a href="paystack"  className='dropdown-item'>Check Out</a>
+  </div>
 </div>
 
               </li>
@@ -131,7 +128,7 @@ const Ecommerce = () => {
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
-       : products.map((product) => (<Product addToCart={addToCart} product={product} />))
+       : products.map((product, index) => (<Product index={index} addToCart={addToCart} product={product} />))
        }
       </div>
         </div>
